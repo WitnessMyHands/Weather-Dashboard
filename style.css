@@ -1,0 +1,9 @@
+/* Button Styling */
+
+#cityName{
+  border-radius: 0.3rem 0 0 0.3rem;
+}
+
+#searchBtn{
+  border-radius: 0 0.3rem 0.3rem 0;
+}
