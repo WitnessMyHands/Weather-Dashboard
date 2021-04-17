@@ -6,32 +6,37 @@ var dayPlusThree = moment().add(3, 'days').format('ddd, MMM D');
 var dayPlusFour = moment().add(4, 'days').format('ddd, MMM D');
 var dayPlusFive = moment().add(5, 'days').format('ddd, MMM D');
 
+// Variable pulling JSON file for Cities
 var cities = JSON.parse(localStorage.getItem('cities')) || [];
 
+// Ask Tutor
 $("#cityName").keypress(function () {
   var _val = $("#cityName").val();
   var _txt = _val.charAt(0).toUpperCase() + _val.slice(1);
   $("#cityName").val(_txt);
 })
-// Today Parameters
+
+// Today Parameters from API using retrieve from ajax, then posting Response
 function displayCityInfo(chosenCity) {
   $("#today").empty();
   var city = chosenCity
-  var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q="+ city +"&units=imperial&appid=e9b735c3398cfe4564ec31ab0eed5a07";
+  // How to pull API key? API key nor working
+  var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q="+ city +"&units=imperial&appid=9252538e0cdc637a6781b199ba8f3ff7";
     $.ajax({
       url: queryURL,
       method: "GET"
     }).then(function(response) {
       console.log(response)
-// 5-Day Parameters             
+      
+// 5-Day Latitude and Longitude Parameters
 function getFiveDayForecast (){  
   var lat = response.city.coord.lat;
   var lon = response.city.coord.lon;
-  var queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&units=imperial&appid=e9b735c3398cfe4564ec31ab0eed5a07";
+  var queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&units=imperial&appid=9252538e0cdc637a6781b199ba8f3ff7";
     $.ajax({
       url: queryURL,
       method: "GET"
-    }).then(function(response) {
+    }).then(function(response) { // Visual Display for Current and Future Days
     var todayIconLink = "http://openweathermap.org/img/wn/"+ response.current.weather[0].icon +"@2x.png";
     var dayOneIconLink = "http://openweathermap.org/img/wn/"+ response.daily[0].weather[0].icon +".png";
     var dayTwoIconLink = "http://openweathermap.org/img/wn/"+ response.daily[1].weather[0].icon +".png";
@@ -44,7 +49,7 @@ function getFiveDayForecast (){
     var displayCityDate = $("<h2>").text(city + ": "+ dayDate);
     display.append(displayCityDate);
 
-    // Today Information / Styling
+    // TODAY Information / Styling from API
     var icon = $("<img class= 'float-right bg-info rounded mr-5' src="+todayIconLink+">");
       display.append(icon);
     var temp = $("<h4>").text(" Temperature: " + response.current.temp +"°F");
@@ -58,7 +63,7 @@ function getFiveDayForecast (){
       display.append(uvi, uviVal);
     $("#today").append(display);
 
-    // U.V. Index Color
+    // U.V. Index Color -- Ask tutor why U.V. Index only works for certain time frames? Night time error?
     if (response.current.uvi<=2){
       $("#uvi").addClass("bg-success");
     } else if (response.current.uvi<=7){
@@ -108,10 +113,12 @@ function getFiveDayForecast (){
   });
 };
 
+// Retrieve from Line 31
 getFiveDayForecast();
           })
         }
 
+// Pulls History using BTN
 function renderButtons() {
   $("#history").empty();
   for (var i = 0; i < cities.length; i++) {
@@ -130,7 +137,9 @@ $(document).ready(function() {
   displayCityInfo(chosenCity);
 })
 
+// Click Function -- Can Enter be Pressed instead?
 $("#searchBtn").on("click", function(event) {
+    // Displays nothing if undefined is entered
     event.preventDefault();
     var chosenCity = $("#cityName").val().trim();
   if (cities.indexOf(chosenCity)===-1){
@@ -147,6 +156,7 @@ $(document).on("click", ".city", function(event) {
   displayCityInfo(chosenCity); 
 })
 
+// Clear History BTN
 $("#clearList").click(function(event) {
   event.preventDefault();
   $("#history").empty();
