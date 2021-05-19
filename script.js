@@ -21,7 +21,7 @@ function displayCityInfo(chosenCity) {
   $("#today").empty();
   var city = chosenCity
   // How to pull API key? API key nor working
-  var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q="+ city +"&units=imperial&appid=9252538e0cdc637a6781b199ba8f3ff7";
+  var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q="+ city +"&units=imperial&appid=";
     $.ajax({
       url: queryURL,
       method: "GET"
@@ -32,7 +32,7 @@ function displayCityInfo(chosenCity) {
 function getFiveDayForecast (){  
   var lat = response.city.coord.lat;
   var lon = response.city.coord.lon;
-  var queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&units=imperial&appid=9252538e0cdc637a6781b199ba8f3ff7";
+  var queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&units=imperial&appid=";
     $.ajax({
       url: queryURL,
       method: "GET"
